@@ -13,6 +13,7 @@ you're interested in seeing versions for other array types and
 collections, and that will get done a bit sooner.   
   
 Brian Romanowski   
+romanows@gmail.com  
 
 
 # Empirical Runtime Evaluation
