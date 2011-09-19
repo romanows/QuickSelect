@@ -1,0 +1,54 @@
+Analysis of the plots produced from the QuickMedianEval data.
+
+== Method ==
+The wall-clock runtime was measured for 100 trials of median finding.
+In each trial, 1e6 elements were processed, but the size of the arrays changed.
+For example, for an array length of 100, the median was found in 1e6/1e2 arrays for each trial.
+This "extra" work was necessary because the algorithms often finished too fast for the system clock to register a tic.
+The array lengths tested were 100, 101, 1000, 1001, 10000, 10001, 100000, 100001.
+Note the even and odd length of the arrays to stress the median calculation, which must find two middle elements when the array has even length.
+
+Each array in which the median was found was filled with consecutive integers, doubled when the condition "duplicates" was active.
+The arrays were randomized, sorted, reverse-sorted, sorted but for the very middle 10%, reverse-sorted but for the very middle 10%.
+
+SortMedian operated by first sorting the array: expected O(n log n).
+QuickMedian operated by using the quick select algorithm rather than a full sort: expected O(n).
+QuickMedian has an additional parameter that selects its pivot picking method: middle element, random element, median of three elements (25%, 50%, 75%), and randomized median-of-three.
+
+Conditions were randomized and the evaluation run overnight with hopefully a otherewise quiescent computer.
+
+== Hypothesis ==
+=== Main Hypotheses ===
+QuickMedian should outperform SortMedian, most at long array lengths because of the expected O(n) vs. O(n lg n) runtime.
+The randomized median-of-three pivot picking method should beat other pivot picking methods in the unsorted elements case.
+
+=== Other Hypotheses ===
+SortMedian should perform best on sorted arrays and worst on unsorted arrays; the same should be true of QuickMedian but with a lesser magnitude effect.
+The performance gap between SortMedian and QuickMedian should be smallest when the arrays are sorted but for the very middle 10%.
+
+== Analysis ==
+First apologies to Tufte and the color-blind, this analysis focuses on the plot in "QuickSelectEval_large1.png".
+
+First apparent is that the SortMedian method does get slower as the length of the input array increases.
+From left to right, each jump in the SortMedian series is an order-of-magnitude length increase in the input array.
+
+Then, one might notice that from top-to-bottom on the plot, the first five series illustrate the behavior of SortMedian on increasingly sorted arrays. 
+It is interesting to see that reverse-sorted arrays are quickest to sort; perhaps the sorting algorithm detects that the array is sorted and switches the sorting method more quickly.
+The small ripples in these graphs are from the no-duplicate/duplicate conditions.
+
+On the bottom, with the clearly best performance for large arrays, are the QuickMedian results.
+Here, the sorted arrays are processed quickest by the deterministic pivot picking methods because they tend to pick the median element straight away.
+The middle element method is great on sorted arrays, but much worse on unsorted or middle-10%-unsorted arrays. 
+
+Surprisingly, the randomized median-of-three pivot picking method that was hypothesized to be the "most robust" method is never any better than the deterministic median-of-three method.
+It matches the median-of-three method's performance on unsorted arrays, seems worse on the middle-10%-unsorted, and is clearly worse in the sorted cases.
+
+However, one of the main benefits of randomized methods is their resistance to arrays which degrade cause the algorithm to switch to the worst-case O(n^2) runtime.
+I think the randomized median-of-three method should be fairly resistant to naturally occurring worst-case arrays.
+For this reason, and because it is similar in performance to the deterministic median-of-three, it will remain the default pivot picking method in QuickMedian.
+However, if you know that you will be running QuickMedian on mostly-sorted data, you can override this default choice when constructing the QuickMedian object.
+
+== Conclusion ==
+QuickMedian is clearly the fastest way to find the median, and should be used particularly when the length of input arrays is at least 100 or greater (smaller arrays were not evaluated).
+
+If throughput performance is important, you are operating on safe and mostly-sorted data, and the possibility of a worst-case O(n^2) runtime won't dissuade you: consider switching to the non-randomized median-of-three pivot picking method when constructing the QuickMedian object.
