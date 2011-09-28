@@ -18,10 +18,10 @@ romanows@gmail.com
 
 # Empirical Runtime Evaluation
 There are plots of runtime evaluation data and an <a href="https://pwnetics.wordpress.com/2011/09/28/an-empirical-analysis-of-quickselect-and-quickmedian/">analysis writeup on   
-my blog</a>.  The image below shows a number of things,  
-but the gist is that finding the median using QuickMedian is indeed   
-better than finding the median using a sort-based method, all other   
-things being equal.   
+my blog</a>.  The image below shows a number of things, but the gist is   
+that finding the median using QuickMedian is indeed better than   
+finding the median using a sort-based method, all other things being    
+equal.   
   
 Click on the image to view a larger, annotated version.  
   
