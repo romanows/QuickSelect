@@ -186,7 +186,7 @@ public class QuickMedianDoubleArrayEval {
 				elapsedTime = new Date().getTime() - elapsedTime;
 				sortedConditionToTime.put(c, sortedConditionToTime.get(c) + elapsedTime);
 
-				if(m != sm) {
+				if(m != sm) {  // FindBugs: not a bug, if the two medians are not exactly equivalent, one of the methods is in error
 					System.out.println("error: " + m + ", " + sm + " : " + c.toString());
 				}
 			}

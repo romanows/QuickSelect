@@ -294,15 +294,14 @@ public class QuickSelectDoubleArray {
 			values[endIndex] = values[beforePivotInsertIdx];
 			values[beforePivotInsertIdx] = pivot;
 
-			if(beforePivotInsertIdx == selectIdx) {
-				beginIndex = beforePivotInsertIdx + 1;  // The pivot index wound up exactly-at the selection index; this will trigger the loop to exit
-				break;
-			} else if(beforePivotInsertIdx < selectIdx) {
+			if(beforePivotInsertIdx < selectIdx) {
 				beginIndex = beforePivotInsertIdx + 1;  // The pivot index wound up to-the-left-of the selection index: look right
 				beforeSelectIdx = beforePivotInsertIdx;
-			} else {
+			} else if(beforePivotInsertIdx > selectIdx) {
 				endIndex = beforePivotInsertIdx - 1;  // The pivot index wound up to-the-right-of the selection index: look left
-				afterSelectIdx = beforePivotInsertIdx;
+				afterSelectIdx = beforePivotInsertIdx;				
+			} else {
+				break;  // The pivot index wound up exactly-at the selection index; exit the loop
 			}
 		}
 
